@@ -1,15 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Proxy Viewer</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 60%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
   <h1>Proxy Viewer</h1>
-  <input type="text" id="urlInput" placeholder="Enter URL to proxy" />
+  <input type="text" id="urlInput" placeholder="Enter URL to proxy" value="https://example.com" />
   <button onclick="loadProxy()">Go</button>
-  <div id="proxyContent" style="border:1px solid #ccc; padding:10px;"></div>
+  <iframe id="proxyFrame"></iframe>
 
-  <script src="script.js"></script>
+  <script>
+    async function loadProxy() {
+      const url = document.getElementById('urlInput').value;
+      const proxyUrl = `https://proxy-project-82kn.onrender.com/proxy?url=${encodeURIComponent(url)}`;
+
+      try {
+        const response = await fetch(proxyUrl);
+        const html = await response.text();
+        document.getElementById('proxyFrame').srcdoc = html;
+      } catch (err) {
+        document.getElementById('proxyFrame').srcdoc = `<p>Error: ${err.message}</p>`;
+      }
+    }
+  </script>
 </body>
 </html>
